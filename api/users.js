@@ -73,12 +73,19 @@ usersRouter.post('/register', catchAsync(async (req, res, next) => {
           error: 'MissingUsernameOrPassword',
           name: 'Missing username or password',
           message: 'Please enter a username and password.',
+          success: false
         });
       } else {
         const user = await getUser({ username, password });
         if (user) {
           const token = jwt.sign(user, JWT_SECRET);
-           res.send({ message: "you're logged in!", success: true, token: token});
+           res.send({ 
+            message: "Login Successful, Welcome!", 
+            success: true, 
+            token: token, 
+            user: user,
+            loggedIn: true
+          });
         } else {
           res.send({
             error: 'InvalidCredentials',

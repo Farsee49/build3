@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import { registerUser } from "../axios/users";
+import React, {useState} from "react";
+import { userLogin } from "../axios/users";
 
 
 
-
-
-
-export default function Register({ navigate }) {
+export default function Login({setToken, setUser, token, user, navigate}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    
     const  handleSubmit = async (ev) => {
         ev.preventDefault();
-       const register = await registerUser({username, password});
-         console.log(register);
-        
-        console.log('username:', username, 'password:', password);
-        if (register.data.success) {
-            navigate('/login');
+        const login = await userLogin({username, password});
+        console.log('data', login.data);
+        if (login.data.success === false) {
+            console.log('Invalid Credentials');
+            return;
         }
+        if (login.data.success) {
+            console.log('Login Successful')
+        await setToken(login.data.token);
+        await setUser(login.data.user);
+        navigate('/home')
+           }
     }
-    return(<> 
-    
-    <h1>Register</h1>
+
+    return (<>
+    <h1>Login</h1>
     <div>
             <form onSubmit={handleSubmit}>
             <div>
@@ -34,8 +36,8 @@ export default function Register({ navigate }) {
                 <label className="form-label">Password</label>
                 <input type="password" name="password" onChange={(ev)=> setPassword(ev.target.value)} className="form-input" />
             </div>
-            <button type="submit" className="btn btn-primary ms-4">Register</button>
+            <button type="submit" className="btn btn-primary ms-4">Login</button>
             </form>
         </div>
-    </>)
-}
+  </>  );
+    }

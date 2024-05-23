@@ -20,7 +20,7 @@ export async function registerUser(user) {
 
   //_________________________LOGIN USER_________________________
 
-export async function login(user) {
+export async function userLogin(user) {
     const loginUrl = "http://localhost:4444/api/users/login";
     console.log(user)
   
