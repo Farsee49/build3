@@ -11,7 +11,9 @@ const {
     updatePost,
     deletePost,
     getUserById,
-    createComment
+    createComment,
+    attachCommentsToPosts,
+    addCommentsToPost
 } = require('../db');
 
 
@@ -50,6 +52,8 @@ postsRouter.post('/create', token, catchAsync(async (req, res, next) => {
 
 postsRouter.get('/all', catchAsync(async (req, res, next) => {
     const posts = await getAllPosts();
+    const commpost = await attachCommentsToPosts(posts);
+    console.log(commpost)
         res.send({
             name: 'Success Getting All Posts',
             message: 'Posts Retrieved!!!',
@@ -61,6 +65,8 @@ postsRouter.get('/all', catchAsync(async (req, res, next) => {
  postsRouter.get('/:postId', catchAsync(async (req, res, next) => {
     const { postId } = req.params;
     const post = await getPostById(postId);
+    const commpost = await addCommentsToPost(post);
+    console.log(commpost)
     if (!post) {
         res.send({
             name: 'Error Getting Post',

@@ -27,6 +27,19 @@ async function getAllComments() {
     }
 };
 
+async function getCommentById(commentId) {
+    try {
+        const { rows: [comment] } = await client.query(`
+      SELECT *
+      FROM comments
+      WHERE id=$1;
+    `, [commentId]);
+        return comment;
+    } catch (error) {
+        throw error;
+    }
+};
+
 
 async function getCommentsByPostId(postId) {
     try {
@@ -53,21 +66,40 @@ async function getCommentsByUser(userId) {
         throw error;
     }
 };
-async function addCommentToPost(postId, commentId) {
+async function attachCommentsToPosts(posts) {
+    try{
+        const { rows: comments } = await client.query(`
+        SELECT * FROM comments
+        WHERE "postId" IN (${posts.map(post => post.id).join(',')})
+        ;`)
+        const allComments = await getAllComments();
+        const postsWithComments = posts.map(post => {
+            post.comments = comments.filter(comment => comment.postId === post.id);
+            return post;
+        });
+        return postsWithComments;
+    } catch (error) {
+        console.error("Error attaching comments to posts!");
+ }
+};
+
+async function addCommentsToPost(post) {
     try {
-        const { rows: [comment] } = await client.query(`
-      UPDATE comments
-      SET "postId"=$1
-      WHERE id=$2
-      RETURNING *;
-    `, [postId, commentId]);
-        return comment;
+        const { rows: comments } = await client.query(`
+      SELECT *
+      FROM comments
+      WHERE "postId"=$1;
+    `, [post.id]);
+        post.comments = comments;
+        return post;
     } catch (error) {
         throw error;
     }
-};
+}
 
 async function updateComment(commentId, fields = {}) {
+    console.log('fields',fields)
+    console.log('commentId',commentId)
     const setString = Object.keys(fields).map(
         (key, index) => `"${key}"=$${index + 1}`
     ).join(', ');
@@ -87,7 +119,7 @@ async function updateComment(commentId, fields = {}) {
     } catch (error) {
         throw error;
     }
-};
+ };
 
 async function deleteComment(commentId) {
     try {
@@ -107,5 +139,8 @@ module.exports = {
     getCommentsByUser,
     updateComment,
     deleteComment,
-    addCommentToPost
+    attachCommentsToPosts,
+    addCommentsToPost,
+    getCommentById
+    
 };

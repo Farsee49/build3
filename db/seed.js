@@ -45,7 +45,7 @@ const { createComment } = require('./comments');
                 );
                 CREATE TABLE post_comments (
                     id SERIAL PRIMARY KEY,
-                    "postId" INTEGER REFERENCES posts(id),
+                    "postCommentId" INTEGER REFERENCES posts(id),
                     "commentId" INTEGER REFERENCES comments(id)
                 );
             `);

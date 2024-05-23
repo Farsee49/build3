@@ -85,6 +85,19 @@ async function deletePost(postId) {
     }
 };
 
+async function getPostByCommentId(commentId) {
+    try {
+        const { rows: [post] } = await client.query(`
+      SELECT *
+      FROM posts
+      JOIN comments ON posts.id = comments."postId"
+      WHERE comments.id=$1;
+    `, [commentId]);
+        return post;
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = {
     createPost,
@@ -92,5 +105,6 @@ module.exports = {
     getPostById,
     getPostsByUser,
     updatePost,
-    deletePost
+    deletePost,
+    getPostByCommentId
 };
