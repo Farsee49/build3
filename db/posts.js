@@ -77,6 +77,11 @@ async function updatePost(postId, fields = {}) {
 async function deletePost(postId) {
     try {
         await client.query(`
+        DELETE FROM comments
+        WHERE "postId"=$1;
+        `, [postId]);
+        
+        await client.query(`
       DELETE FROM posts
       WHERE id=$1;
     `, [postId]);

@@ -83,7 +83,7 @@ postsRouter.get('/all', catchAsync(async (req, res, next) => {
     }
  }));
 
- postsRouter.get('/user/:userId', catchAsync(async (req, res, next) => {
+ postsRouter.get('/user/:userId', token, catchAsync(async (req, res, next) => {
     const { userId } = req.params;
     const posts = await getPostsByUser(userId);
         res.send({
@@ -94,7 +94,7 @@ postsRouter.get('/all', catchAsync(async (req, res, next) => {
         });
  }));
 
-postsRouter.patch('/:postId', token, catchAsync(async (req, res, next) => {
+postsRouter.patch('/edit/:postId', token, catchAsync(async (req, res, next) => {
     const { postId } = req.params;
     console.log(req.user)
     const updatedPost = await getPostById(postId);

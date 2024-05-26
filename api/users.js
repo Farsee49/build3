@@ -12,7 +12,8 @@ const {
     getUserById,
     getAllUsers,
     deleteUser,
-    getPostsByUser
+    getPostsByUser,
+    attachCommentsToPosts
 } = require('../db');
 
 const UnauthorizedError = () => 'You are not authorized to access this route.';
@@ -165,22 +166,28 @@ console.log('AT all users', req.user)
   
   //=====================================================================
 
-  //GET /api/users/:username/posts
-  usersRouter.get('/:username/posts', token, catchAsync(async (req, res, next) => {
-    const { username } = req.params;
-    console.log('req.user', req.user)
+  //GET /api/users/posts
+  usersRouter.get('/posts',  token, catchAsync(async (req, res, next) => {
+     console.log('req.user at users post', req.user)
+     console.log(req.body)
+      username = req.user.username;
+    console.log('req.user', username)
     const user = await getUserByUsername(username);
+    const userId = user.id;
     console.log('USER', user)
     if (!user) {
       res.send({
         error: 'UserNotFound',
         name: 'UserNotFound', 
         message: 'User not found.'
-      });
-    } else {
-      const posts = await getPostsByUser(user.id);
+      });}
+      console.log('past user')
+      
+    // } else {
+      const posts = await getPostsByUser(userId);
+      const postsWithComments = await attachCommentsToPosts(posts);
       res.send(posts);
-    }
+    // }
   }));
 
 module.exports = usersRouter;
