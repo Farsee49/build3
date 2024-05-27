@@ -17,8 +17,8 @@ export default function Login({setToken, setUser, token, user, navigate, setIsAd
             return;
         } 
         if(login.data.user.username === "admin") {
-            //console.log('Admin Logged In');
-            //setIsAdmin(true)
+            console.log('Admin Logged In');
+            setIsAdmin(true)
         }
         if(login.data.success === true) {
         window.localStorage.setItem('token', login.data.token);

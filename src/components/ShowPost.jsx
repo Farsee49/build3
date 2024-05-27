@@ -1,11 +1,20 @@
 import React, {Fragment} from "react";
-import { useParams } from "react-router-dom";
+import NewComments from "./NewComments";
+import { deletePost } from "../axios/posts";
 
 
 
 
 
 export default function ShowPost({ singlePost, setEditPost, navigate, post}) {
+    const token = window.localStorage.getItem('token');
+    const postId = singlePost.id;
+
+    async function handleDelete() {
+        console.log('Delete Post:', singlePost)
+        const result = await deletePost(postId, token);
+        console.log('Delete Result:', result);
+    }
 
     console.log('Single Post:', singlePost)
     return (
@@ -18,6 +27,12 @@ export default function ShowPost({ singlePost, setEditPost, navigate, post}) {
                                  setEditPost(singlePost)
                                    navigate(`/edit-post/${singlePost.id}`)
                                  }}>Edit Post</button>
+            <button className="ms-5" variant="primary" size="sm" onClick ={ () => {
+                        console.log('Post:', singlePost)
+                                 handleDelete(postId, token)
+                                navigate(`/userposts`)
+                                 }
+                                    }>Delete Post</button>
             <h3>Post Comments</h3>
             
             {singlePost.comments.map(comment =>
@@ -27,6 +42,9 @@ export default function ShowPost({ singlePost, setEditPost, navigate, post}) {
                     
                 </Fragment>
             )}
+            <div>
+                <NewComments singlePost={singlePost} navigate={navigate} />
+            </div>
         </>
     )
 }

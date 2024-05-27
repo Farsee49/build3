@@ -11,7 +11,7 @@ export default function UserPosts({ user, setSinglePost, navigate}) {
     const fetchUserPosts = async () => {
         console.log('token:', token)
         const result = await getPostsByUser(token);
-        console.log('User Posts:', result.data.comments)
+        //console.log('User Posts:', result.data)
         const uPosts = result.data;
         setUserPosts(uPosts);
         console.log('User Posts:', uPosts);

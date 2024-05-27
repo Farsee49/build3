@@ -8,12 +8,10 @@ import UserPosts from "./UserPosts.jsx";
 import ShowPost from "./ShowPost.jsx";
 import NewPost from "./NewPost.jsx";
 import EditPost from "./EditPost.jsx";
+import Navbar from "./Navbar.jsx";
 
-
-
-
-
-
+import { getAllPosts } from "../axios/posts";
+import { getCurrentUser } from "../axios/users.js";
 
 
 
@@ -21,6 +19,7 @@ export default function App({name}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+    const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
     const [userPosts, setUserPosts] = useState([{}]);
@@ -28,10 +27,10 @@ export default function App({name}) {
     const [editPost, setEditPost] = useState([{}]);
     const navigate = useNavigate();
     const time = new Date().toLocaleTimeString();
-    console.log('app singlepost:', singlePost);
    
     
-
+    async function getUser () {
+    }
     async function updateLocal() {
         const mainUser = await JSON.parse(window.localStorage.getItem('user'));
         const mainToken =  window.localStorage.getItem('token');
@@ -44,9 +43,7 @@ export default function App({name}) {
             setToken(mainToken);
            
         }
-        if(mainUser.username === "admin") {
-             setIsAdmin(true);
-        }
+        
         console.log('mainUser:', mainUser, 'mainToken:', mainToken);
     }
     function logout() {
@@ -60,9 +57,6 @@ export default function App({name}) {
    
 
     useEffect(() => {
-        
-        
- 
         Promise.all([updateLocal()]).then(() => setToken(token));
     }, [token])
 
@@ -70,35 +64,22 @@ console.log('at App', 'user:', user, 'token:', token, 'isAdmin:', isAdmin);
 
 
     return (<>
-    <div className="text-center">
-    <a  href="/login">Login</a>
-    <br></br>
-    <a href="/register">Register</a>
-    <br></br>
-    <a href="/home">Home</a>
-    <br></br>
-    <a href="/posts">Posts</a>
-    <br></br>
-    <a href="/userposts">User Posts</a>
-    <br></br>
-    <a href="/new-post">New Post</a>
-    <br></br>
-    <button onClick={logout}>Log Out</button>
-    <hr></hr>
-    </div>
-    <br></br>
-   
-   
-    
-   
-        <div className="text-center">
+
+    <Navbar
+    setToken={setToken}
+    setUser={setUser}
+    setIsAdmin={setIsAdmin}
+    navigate={navigate}
+    />
+
+        <div className="text-center mt-5">
             <h1>Welcome {user.username}</h1>
             <br></br>
             <h2>@{time}</h2>
        
         </div>
         
-        <Routes>
+    <Routes>
         <Route path="/home"
          element={<Home 
          />} />
@@ -111,6 +92,8 @@ console.log('at App', 'user:', user, 'token:', token, 'isAdmin:', isAdmin);
             setToken={setToken}
             navigate={navigate}
             isAdmin={isAdmin}
+            loggedIn={loggedIn}
+            setLoggedIn={setLoggedIn}
             setIsAdmin={setIsAdmin}
         />} />
        
@@ -163,7 +146,7 @@ console.log('at App', 'user:', user, 'token:', token, 'isAdmin:', isAdmin);
             editPost={editPost}
         />} />
 
-        </Routes>
+    </Routes>
 
 
   </>  );

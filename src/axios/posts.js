@@ -88,3 +88,23 @@ export async function updatePost (postId, token, post) {
       console.error(error);
     }
   }
+
+
+//_________________________DELETE POST_________________________
+
+export async function deletePost (postId, token) {
+    const deletePostUrl = `http://localhost:4444/api/posts/${postId}`;
+    
+    try{
+      const response = await axios.delete(deletePostUrl, {
+        headers: {  
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('Post deleted', response.data);
+      return response;
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }

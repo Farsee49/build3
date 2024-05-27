@@ -75,6 +75,7 @@ async function updatePost(postId, fields = {}) {
 };
 
 async function deletePost(postId) {
+    console.log('postId',postId)
     try {
         await client.query(`
         DELETE FROM comments

@@ -53,7 +53,7 @@ postsRouter.post('/create', token, catchAsync(async (req, res, next) => {
 postsRouter.get('/all', catchAsync(async (req, res, next) => {
     const posts = await getAllPosts();
     const commpost = await attachCommentsToPosts(posts);
-    console.log(commpost)
+    //console.log(commpost)
         res.send({
             name: 'Success Getting All Posts',
             message: 'Posts Retrieved!!!',
@@ -125,6 +125,7 @@ postsRouter.patch('/edit/:postId', token, catchAsync(async (req, res, next) => {
 
 postsRouter.delete('/:postId',token,catchAsync(async (req, res, next) => {
         const { postId } = req.params;
+        
         const post = await getPostById(postId);
         console.log(post)
         if ( !post ){
@@ -152,8 +153,9 @@ postsRouter.delete('/:postId',token,catchAsync(async (req, res, next) => {
 
 //-------------------------------------Comments----------------------------------------------
 
-postsRouter.post('/:postId/comments', token, catchAsync(async (req, res, next) => {
+postsRouter.post('/:postId/comments/create', token, catchAsync(async (req, res, next) => {
    const { postId } = req.params;
+    console.log('at api', req.body)
    req.params.postId = postId;
     console.log(postId)
     req.body.authorId = req.user.id;
