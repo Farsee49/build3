@@ -34,7 +34,7 @@ export default function App({name}) {
     async function updateLocal() {
         const mainUser = await JSON.parse(window.localStorage.getItem('user'));
         const mainToken =  window.localStorage.getItem('token');
-        console.log('mainUser:', mainUser);
+        //console.log('mainUser:', mainUser);
        
         if(mainUser) {
             setUser(mainUser);
@@ -44,7 +44,6 @@ export default function App({name}) {
            
         }
         
-        console.log('mainUser:', mainUser, 'mainToken:', mainToken);
     }
     function logout() {
         window.localStorage.removeItem('token');
@@ -60,11 +59,8 @@ export default function App({name}) {
         Promise.all([updateLocal()]).then(() => setToken(token));
     }, [token])
 
-console.log('at App', 'user:', user, 'token:', token, 'isAdmin:', isAdmin);
-
 
     return (<>
-
     <Navbar
     setToken={setToken}
     setUser={setUser}

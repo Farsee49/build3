@@ -80,7 +80,7 @@ const { createComment } = require('./comments');
         console.log("Starting to create posts...");
         try {
             const postsToCreate = [
-                { authorId: 1, title: "First Post", content: "This is my first post." },
+                { authorId: 3, title: "First Post", content: "This is my first post." },
                 { authorId: 2, title: "Second Post", content: "This is my second post." },
                 { authorId: 1, title: "Third Post", content: "This is my third post." }
             ];
