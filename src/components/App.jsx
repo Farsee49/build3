@@ -9,9 +9,11 @@ import ShowPost from "./ShowPost.jsx";
 import NewPost from "./NewPost.jsx";
 import EditPost from "./EditPost.jsx";
 import Navbar from "./Navbar.jsx";
+import GetQuote from "./GetQuote.jsx";
 
 import { getAllPosts } from "../axios/posts";
 import { getCurrentUser } from "../axios/users.js";
+
 
 
 
@@ -25,8 +27,10 @@ export default function App({name}) {
     const [userPosts, setUserPosts] = useState([{}]);
     const [singlePost, setSinglePost] = useState({});
     const [editPost, setEditPost] = useState([{}]);
+    const [quote, setQuote] = React.useState([]);
     const navigate = useNavigate();
     const time = new Date().toLocaleTimeString();
+    const date = new Date().toLocaleDateString();
    
     
     async function getUser () {
@@ -57,6 +61,8 @@ export default function App({name}) {
 
     useEffect(() => {
         Promise.all([updateLocal()]).then(() => setToken(token));
+       
+        console.log('quote:', quote);
     }, [token])
 
 
@@ -70,8 +76,12 @@ export default function App({name}) {
 
         <div className="text-center mt-5">
             <h1>Welcome {user.username}</h1>
-            <br></br>
+            
             <h2>@{time}</h2>
+            <h2>{date}</h2>
+            <div>
+                <GetQuote/>    
+            </div>
        
         </div>
         
